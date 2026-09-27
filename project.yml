@@ -36,3 +36,16 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: -O
     dependencies:
       - package: TsumoRonCore
+
+  TsumoRonTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+    settings:
+      base:
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: TsumoRon
+      - package: TsumoRonCore

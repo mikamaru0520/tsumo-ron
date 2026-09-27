@@ -2,138 +2,332 @@ import SwiftUI
 import TsumoRonCore
 
 struct ContentView: View {
-    @State private var selectedYaku: Set<Yaku> = []
-    @State private var fu: Int = 30
-    @State private var playerType: PlayerType = .nonDealer
-    @State private var winType: WinType = .ron
-    @State private var calculatedScore: Score?
+    @State private var state = AppState()
+    private let reducer = AppReducer()
 
-    private let calculator = ScoreCalculator()
-    private let availableYaku = Yaku.commonYaku
-    private let fuOptions = [20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110]
+    // 役を翻数ごとにグループ分け
+    private let yakuByHan: [(han: Int, yaku: [YakuDefinition])] = [
+        (1, YakuDefinition.definitions.values.filter { $0.menzenHan == 1 && $0.id != "riichi" && $0.id != "ippatsu" && $0.id != "double_riichi" && $0.id != "tsumo" && $0.id != "haitei" && $0.id != "houtei" && $0.id != "rinshan" && $0.id != "chankan" && !["ton", "nan", "sha", "pei", "haku", "hatsu", "chun"].contains($0.id) }.sorted(by: { $0.id < $1.id })),
+        (2, YakuDefinition.definitions.values.filter { $0.menzenHan == 2 }.sorted(by: { $0.id < $1.id })),
+        (3, YakuDefinition.definitions.values.filter { $0.menzenHan == 3 }.sorted(by: { $0.id < $1.id })),
+        (6, YakuDefinition.definitions.values.filter { $0.menzenHan == 6 }.sorted(by: { $0.id < $1.id }))
+    ]
+
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("役") {
-                    ForEach(availableYaku) { yaku in
-                        Button {
-                            toggleYaku(yaku)
-                        } label: {
-                            HStack {
-                                Text(yaku.name)
-                                Spacer()
-                                if selectedYaku.contains(yaku) {
-                                    Image(systemName: "checkmark")
-                                        .foregroundStyle(.blue)
-                                }
-                                Text("\(yaku.han)翻")
-                                    .foregroundStyle(.secondary)
-                            }
+            ZStack {
+                // 背景
+                LinearGradient(
+                    colors: [Color.appBackground, Color.appPrimaryLight.opacity(0.1)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // 役のセクション
+                        ForEach(yakuByHan, id: \.han) { group in
+                            yakuSection(han: group.han, yaku: group.yaku)
                         }
-                        .foregroundStyle(.primary)
+
+                        // その他セクション
+                        otherSection
                     }
+                    .padding()
+                    .padding(.bottom, 100)  // 計算ボタン分の余白
                 }
 
-                Section("符") {
-                    Picker("符", selection: $fu) {
-                        ForEach(fuOptions, id: \.self) { fuValue in
-                            Text("\(fuValue)符").tag(fuValue)
+                // 計算ボタン（固定表示）
+                VStack {
+                    Spacer()
+                    calculateButton
+                }
+            }
+            .navigationTitle("ツモロン")
+            .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: Binding(
+                get: { state.isResultPresented },
+                set: { if !$0 { send(.resultDismissed) } }
+            )) {
+                if let score = state.calculatedScore {
+                    ResultSheet(
+                        score: score,
+                        onDismiss: { send(.resultDismissed) },
+                        onReset: { send(.resetTapped) }
+                    )
+                }
+            }
+            .sheet(isPresented: Binding(
+                get: { state.helpYakuId != nil },
+                set: { if !$0 { send(.helpDismissed) } }
+            )) {
+                if let yakuId = state.helpYakuId {
+                    YakuHelpSheet(yakuId: yakuId) {
+                        send(.helpDismissed)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func yakuSection(han: Int, yaku: [YakuDefinition]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // セクションヘッダー
+            Text("\(han)翻")
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.appPrimary)
+                .padding(.horizontal, 4)
+
+            // 役ボタン
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(yaku, id: \.id) { def in
+                    yakuButtonRow(def)
+                }
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.appCardBackground)
+                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        )
+    }
+
+    @ViewBuilder
+    private var otherSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("その他")
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.appPrimary)
+                .padding(.horizontal, 4)
+
+            VStack(spacing: 12) {
+                // 役牌
+                Stepper("役牌: \(state.yakuhaiCount)", value: Binding(
+                    get: { state.yakuhaiCount },
+                    set: { send(.yakuhaiCountChanged($0)) }
+                ), in: 0...4)
+                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.appCardBackground)
+                )
+
+                // ドラ
+                Stepper("ドラ: \(state.doraCount)", value: Binding(
+                    get: { state.doraCount },
+                    set: { send(.doraCountChanged($0)) }
+                ), in: 0...10)
+                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.appCardBackground)
+                )
+
+                // 符
+                HStack {
+                    Text("符")
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+
+                    Spacer()
+
+                    Picker("", selection: Binding(
+                        get: { state.fu },
+                        set: { send(.fuChanged($0)) }
+                    )) {
+                        ForEach([20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110], id: \.self) { fu in
+                            Text("\(fu)符").tag(fu)
                         }
                     }
                     .pickerStyle(.menu)
                 }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.appCardBackground)
+                )
 
-                Section("親/子") {
-                    Picker("親/子", selection: $playerType) {
+                // 鳴きあり
+                Toggle("鳴きあり", isOn: Binding(
+                    get: { state.isNaki },
+                    set: { _ in send(.nakiToggled) }
+                ))
+                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.appCardBackground)
+                )
+
+                // 親/子
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("親/子")
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.appTextSecondary)
+
+                    Picker("", selection: Binding(
+                        get: { state.playerType },
+                        set: { send(.playerTypeChanged($0)) }
+                    )) {
                         Text("親").tag(PlayerType.dealer)
                         Text("子").tag(PlayerType.nonDealer)
                     }
                     .pickerStyle(.segmented)
                 }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.appCardBackground)
+                )
 
-                Section("ツモ/ロン") {
-                    Picker("ツモ/ロン", selection: $winType) {
+                // ツモ/ロン
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("ツモ/ロン")
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color.appTextSecondary)
+
+                    Picker("", selection: Binding(
+                        get: { state.winType },
+                        set: { send(.winTypeChanged($0)) }
+                    )) {
                         Text("ツモ").tag(WinType.tsumo)
                         Text("ロン").tag(WinType.ron)
                     }
                     .pickerStyle(.segmented)
                 }
-
-                Section {
-                    Button("計算") {
-                        calculate()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .disabled(selectedYaku.isEmpty)
-                }
-
-                if let score = calculatedScore {
-                    Section("結果") {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("選択した役: \(score.hand.yaku.map(\.name).joined(separator: "・"))")
-                                .font(.subheadline)
-                            Text("合計: \(score.hand.totalHan)翻 \(score.hand.fu)符")
-                                .font(.subheadline)
-
-                            Divider()
-
-                            switch score.payment {
-                            case .dealerTsumo(let fromEach):
-                                Text("\(fromEach)点∀（各\(fromEach)点）")
-                                    .font(.title2)
-                                    .bold()
-                                Text("総計: \(score.payment.totalPoints)点")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-
-                            case .nonDealerTsumo(let fromDealer, let fromNonDealer):
-                                Text("\(fromDealer)点・\(fromNonDealer)点")
-                                    .font(.title2)
-                                    .bold()
-                                Text("親\(fromDealer)点、子各\(fromNonDealer)点")
-                                    .font(.subheadline)
-                                Text("総計: \(score.payment.totalPoints)点")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-
-                            case .dealerRon(let total):
-                                Text("\(total)点")
-                                    .font(.title)
-                                    .bold()
-
-                            case .nonDealerRon(let total):
-                                Text("\(total)点")
-                                    .font(.title)
-                                    .bold()
-                            }
-                        }
-                    }
-                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.appCardBackground)
+                )
             }
-            .navigationTitle("ツモロン")
         }
-    }
-
-    private func toggleYaku(_ yaku: Yaku) {
-        if selectedYaku.contains(yaku) {
-            selectedYaku.remove(yaku)
-        } else {
-            selectedYaku.insert(yaku)
-        }
-    }
-
-    private func calculate() {
-        let hand = Hand(
-            yaku: Array(selectedYaku),
-            fu: fu,
-            playerType: playerType,
-            winType: winType
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.appCardBackground)
+                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
         )
-        calculatedScore = calculator.calculate(hand: hand)
+    }
+
+    @ViewBuilder
+    private func yakuButtonRow(_ def: YakuDefinition) -> some View {
+        HStack(spacing: 4) {
+            // 役名ボタン
+            Button {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    send(.yakuTapped(def.id))
+                }
+            } label: {
+                HStack {
+                    Text(def.name)
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+
+                    Spacer()
+
+                    // 鳴き時の翻数表示
+                    if state.isNaki, let nakiHan = def.nakiHan {
+                        Text("\(nakiHan)")
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.8))
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(state.selectedYaku.contains(def.id) ? Color.appPrimary : Color.clear)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(
+                            state.selectedYaku.contains(def.id) ? Color.clear : Color.appPrimary,
+                            lineWidth: 2
+                        )
+                )
+            }
+            .foregroundStyle(state.selectedYaku.contains(def.id) ? .white : Color.appPrimary)
+            .disabled(!state.isSelectable(def.id))
+            .opacity(state.isSelectable(def.id) ? 1.0 : 0.4)
+            .sensoryFeedback(.selection, trigger: state.selectedYaku.contains(def.id))
+
+            // ? ボタン
+            Button {
+                send(.helpTapped(def.id))
+            } label: {
+                Image(systemName: "questionmark.circle.fill")
+                    .font(.system(size: 20))
+                    .foregroundStyle(Color.appAccentYellow)
+            }
+            .sensoryFeedback(.selection, trigger: state.helpYakuId != nil)
+        }
+    }
+
+    @ViewBuilder
+    private var calculateButton: some View {
+        VStack(spacing: 0) {
+            // グラデーション境界
+            LinearGradient(
+                colors: [Color.appBackground.opacity(0), Color.appBackground],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 20)
+
+            // ボタン
+            Button {
+                send(.calculateTapped)
+            } label: {
+                HStack {
+                    Text(state.hasYaku ? "計算する" : "役を選んでください")
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+
+                    if state.hasYaku {
+                        Spacer()
+                        Text("\(state.totalHan)翻")
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.9))
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(state.hasYaku ? Color.appAccent : Color.appTextSecondary)
+                )
+                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
+            }
+            .disabled(!state.hasYaku)
+            .padding(.horizontal)
+            .padding(.bottom)
+            .background(Color.appBackground)
+            .sensoryFeedback(.impact, trigger: state.isResultPresented)
+        }
+    }
+
+    private func send(_ intent: AppIntent) {
+        reducer.reduce(state: state, intent: intent)
     }
 }
 
-#Preview {
+#Preview("ライト") {
     ContentView()
+}
+
+#Preview("ダーク") {
+    ContentView()
+        .preferredColorScheme(.dark)
 }
