@@ -12,85 +12,170 @@ struct TileView: View {
 
     var body: some View {
         ZStack {
-            // 背景
-            RoundedRectangle(cornerRadius: 4)
-                .fill(Color.white)
-                .shadow(color: .black.opacity(0.2), radius: 2, x: 1, y: 1)
+            // 背景（アイボリー）
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color(red: 0.98, green: 0.96, blue: 0.93))
+                .shadow(color: .black.opacity(0.15), radius: 3, x: 0, y: 2)
 
             // 和了牌のハイライト
             if isWinning {
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: 6)
                     .strokeBorder(Color.appAccentYellow, lineWidth: 3)
             }
 
             // 牌の内容
-            VStack(spacing: 2) {
+            VStack(spacing: 1) {
+                // 上部：数字や文字
                 switch tile {
                 case .manzu(let num):
-                    Text(kanjiNumber(num))
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.appManzu)
-                    Text("萬")
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.appManzu)
-
+                    manzuContent(num)
                 case .pinzu(let num):
-                    Text(kanjiNumber(num))
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.appPinzu)
-                    Text("筒")
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.appPinzu)
-
+                    pinzuContent(num)
                 case .souzu(let num):
-                    Text(kanjiNumber(num))
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.appSouzu)
-                    Text("索")
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.appSouzu)
-
+                    souzuContent(num)
                 case .jihai(let type):
-                    jihaiView(type)
+                    jihaiContent(type)
                 }
+
+                Spacer()
+
+                // 下部：ペンギン
+                penguinView()
+                    .padding(.bottom, 2)
             }
-            .padding(4)
+            .padding(.top, 4)
+            .padding(.horizontal, 2)
         }
-        .frame(width: 32, height: 44)
+        .frame(width: 36, height: 50)
     }
 
+    // MARK: - 萬子
     @ViewBuilder
-    private func jihaiView(_ type: JihaiType) -> some View {
+    private func manzuContent(_ num: Int) -> some View {
+        VStack(spacing: 0) {
+            Text(kanjiNumber(num))
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 0.4, green: 0.5, blue: 0.6))
+            Text("萬")
+                .font(.system(size: 11, weight: .semibold, design: .rounded))
+                .foregroundStyle(Color(red: 1.0, green: 0.4, blue: 0.4))
+        }
+    }
+
+    // MARK: - 索子（縦棒）
+    @ViewBuilder
+    private func souzuContent(_ num: Int) -> some View {
+        HStack(spacing: 2) {
+            ForEach(0..<num, id: \.self) { index in
+                Capsule()
+                    .fill(Color(red: 0.3, green: 0.6, blue: 0.5))
+                    .frame(width: 2, height: 12)
+            }
+        }
+        .frame(height: 14)
+    }
+
+    // MARK: - 筒子（丸）
+    @ViewBuilder
+    private func pinzuContent(_ num: Int) -> some View {
+        let rows = pinzuLayout(num)
+        VStack(spacing: 2) {
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                HStack(spacing: 2) {
+                    ForEach(Array(row.enumerated()), id: \.offset) { index, _ in
+                        Circle()
+                            .strokeBorder(index % 2 == 0 ? Color(red: 0.5, green: 0.6, blue: 0.75) : Color(red: 1.0, green: 0.6, blue: 0.65), lineWidth: 1.5)
+                            .frame(width: 6, height: 6)
+                    }
+                }
+            }
+        }
+        .frame(height: 18)
+    }
+
+    private func pinzuLayout(_ num: Int) -> [[Int]] {
+        switch num {
+        case 1: return [[0]]
+        case 2: return [[0], [0]]
+        case 3: return [[0], [0], [0]]
+        case 4: return [[0, 0], [0, 0]]
+        case 5: return [[0, 0], [0], [0, 0]]
+        case 6: return [[0, 0, 0], [0, 0, 0]]
+        case 7: return [[0, 0], [0, 0, 0], [0, 0]]
+        case 8: return [[0, 0, 0], [0, 0], [0, 0, 0]]
+        case 9: return [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        default: return [[0]]
+        }
+    }
+
+    // MARK: - 字牌
+    @ViewBuilder
+    private func jihaiContent(_ type: JihaiType) -> some View {
         switch type {
         case .ton:
             Text("東")
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.appTextPrimary)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 0.4, green: 0.5, blue: 0.6))
         case .nan:
             Text("南")
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.appTextPrimary)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 0.4, green: 0.5, blue: 0.6))
         case .sha:
             Text("西")
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.appTextPrimary)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 0.4, green: 0.5, blue: 0.6))
         case .pei:
             Text("北")
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.appTextPrimary)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 0.4, green: 0.5, blue: 0.6))
         case .haku:
-            RoundedRectangle(cornerRadius: 2)
-                .strokeBorder(Color.appTextSecondary, lineWidth: 2)
-                .frame(width: 20, height: 20)
+            Text("白")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 0.5, green: 0.6, blue: 0.7))
         case .hatsu:
             Text("發")
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.appHatsu)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 0.3, green: 0.65, blue: 0.5))
         case .chun:
             Text("中")
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.appChun)
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(red: 1.0, green: 0.4, blue: 0.45))
         }
+    }
+
+    // MARK: - ペンギン
+    @ViewBuilder
+    private func penguinView() -> some View {
+        ZStack {
+            // 体（円形）
+            Circle()
+                .fill(Color(red: 0.5, green: 0.6, blue: 0.7))
+                .frame(width: 14, height: 14)
+
+            // お腹（白い楕円）
+            Ellipse()
+                .fill(Color.white.opacity(0.9))
+                .frame(width: 8, height: 10)
+                .offset(y: 1)
+
+            // 目
+            HStack(spacing: 3) {
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 2.5, height: 2.5)
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 2.5, height: 2.5)
+            }
+            .offset(y: -2)
+
+            // くちばし
+            Circle()
+                .fill(Color(red: 1.0, green: 0.7, blue: 0.3))
+                .frame(width: 2, height: 2)
+                .offset(y: 1)
+        }
+        .frame(width: 16, height: 16)
     }
 
     private func kanjiNumber(_ num: Int) -> String {
