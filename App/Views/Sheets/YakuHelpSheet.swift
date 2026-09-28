@@ -81,11 +81,14 @@ struct YakuHelpSheet: View {
             .background(Color.appBackground)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("閉じる") {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
                         onDismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundStyle(Color.appTextSecondary)
                     }
-                    .font(.system(.body, design: .rounded))
                 }
             }
         }

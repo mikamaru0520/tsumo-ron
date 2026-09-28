@@ -82,35 +82,19 @@ struct ResultSheet: View {
                         }
                     }
 
-                    // ボタン
-                    VStack(spacing: 12) {
-                        Button {
-                            onDismiss()
-                        } label: {
-                            Text("閉じる")
-                                .font(.system(size: 18, weight: .bold, design: .rounded))
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .fill(Color.appPrimary)
-                                )
-                        }
-
-                        Button {
-                            onReset()
-                        } label: {
-                            Text("リセット")
-                                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                                .foregroundStyle(Color.appTextSecondary)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .strokeBorder(Color.appTextSecondary, lineWidth: 2)
-                                )
-                        }
+                    // リセットボタン
+                    Button {
+                        onReset()
+                    } label: {
+                        Text("リセット")
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color.appTextSecondary)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .strokeBorder(Color.appTextSecondary, lineWidth: 2)
+                            )
                     }
                     .padding(.horizontal)
                 }
@@ -123,6 +107,16 @@ struct ResultSheet: View {
                     Text("点数")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.appPrimary)
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        onDismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
                 }
             }
         }
