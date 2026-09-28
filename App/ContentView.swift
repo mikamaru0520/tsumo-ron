@@ -132,8 +132,14 @@ struct ContentView: View {
 
     private var customToolbar: some View {
         HStack {
-            // ロゴマーク
-            TsumoRonMark(size: 32)
+            // ロゴマーク + タイトル
+            HStack(spacing: 12) {
+                TsumoRonMark(size: 32)
+
+                Text("ツモロン")
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.appTextPrimary)
+            }
 
             Spacer()
 
@@ -143,7 +149,7 @@ struct ContentView: View {
             } label: {
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: 20))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color.appTextPrimary)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.glass)
