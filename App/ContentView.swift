@@ -51,25 +51,24 @@ struct ContentView: View {
             }
             .navigationTitle("ツモロン")
             .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: Binding(
-                get: { state.isResultPresented },
-                set: { if !$0 { send(.resultDismissed) } }
-            )) {
-                if let score = state.calculatedScore {
-                    ResultSheet(
-                        score: score,
-                        onDismiss: { send(.resultDismissed) },
-                        onReset: { send(.resetTapped) }
-                    )
+            .overlay {
+                // 計算結果モーダル
+                if state.isResultPresented, let score = state.calculatedScore {
+                    ModalOverlay {
+                        ResultModal(
+                            score: score,
+                            onDismiss: { send(.resultDismissed) },
+                            onReset: { send(.resetTapped) }
+                        )
+                    }
                 }
-            }
-            .sheet(isPresented: Binding(
-                get: { state.helpYakuId != nil },
-                set: { if !$0 { send(.helpDismissed) } }
-            )) {
+
+                // 役の説明モーダル
                 if let yakuId = state.helpYakuId {
-                    YakuHelpSheet(yakuId: yakuId) {
-                        send(.helpDismissed)
+                    ModalOverlay {
+                        YakuHelpModal(yakuId: yakuId) {
+                            send(.helpDismissed)
+                        }
                     }
                 }
             }
