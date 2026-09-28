@@ -71,4 +71,45 @@ public enum Tile: Sendable, Hashable {
         }
         return false
     }
+
+    /// 牌面に表示する数字（漢数字）
+    public var displayNumber: String? {
+        guard let n = number else { return nil }
+        switch n {
+        case 1: return "一"
+        case 2: return "二"
+        case 3: return "三"
+        case 4: return "四"
+        case 5: return "五"
+        case 6: return "六"
+        case 7: return "七"
+        case 8: return "八"
+        case 9: return "九"
+        default: return nil
+        }
+    }
+
+    /// 牌面に表示する種類（萬・筒・索）
+    public var displaySuit: String? {
+        switch self {
+        case .manzu: return "萬"
+        case .pinzu: return "筒"
+        case .souzu: return "索"
+        case .jihai: return nil
+        }
+    }
+
+    /// 字牌の文字
+    public var displayJihai: String? {
+        guard let type = jihaiType else { return nil }
+        switch type {
+        case .ton: return "東"
+        case .nan: return "南"
+        case .sha: return "西"
+        case .pei: return "北"
+        case .haku: return nil  // 白は枠で表現
+        case .hatsu: return "發"
+        case .chun: return "中"
+        }
+    }
 }

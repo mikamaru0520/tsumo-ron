@@ -24,28 +24,29 @@ public struct YakuExample: Sendable {
 
 extension YakuExample {
     /// 役ごとの牌姿例
+    /// 指定された牌姿: 平和 123m 456m 345p 78[9]s 22s 等
     public static let examples: [String: YakuExample] = [
         // 1翻
         "pinfu": YakuExample(
             melds: [
                 .shuntsu(.manzu(1), .manzu(2), .manzu(3)),
                 .shuntsu(.manzu(4), .manzu(5), .manzu(6)),
-                .shuntsu(.pinzu(2), .pinzu(3), .pinzu(4)),
-                .shuntsu(.souzu(5), .souzu(6), .souzu(7))
+                .shuntsu(.pinzu(3), .pinzu(4), .pinzu(5)),
+                .shuntsu(.souzu(7), .souzu(8), .souzu(9))
             ],
-            pair: [.manzu(8), .manzu(8)],
-            winningTile: .souzu(7)
+            pair: [.souzu(2), .souzu(2)],
+            winningTile: .souzu(9)
         ),
 
         "tanyao": YakuExample(
             melds: [
                 .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
-                .shuntsu(.manzu(5), .manzu(6), .manzu(7)),
-                .koutsu(.pinzu(3)),
-                .shuntsu(.souzu(3), .souzu(4), .souzu(5))
+                .koutsu(.pinzu(6)),
+                .shuntsu(.souzu(4), .souzu(5), .souzu(6)),
+                .shuntsu(.souzu(6), .souzu(7), .souzu(8))
             ],
-            pair: [.pinzu(6), .pinzu(6)],
-            winningTile: .souzu(5)
+            pair: [.manzu(8), .manzu(8)],
+            winningTile: .souzu(8)
         ),
 
         "iipeikou": YakuExample(
@@ -53,104 +54,148 @@ extension YakuExample {
                 .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
                 .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
                 .shuntsu(.pinzu(5), .pinzu(6), .pinzu(7)),
-                .koutsu(.souzu(8))
+                .shuntsu(.souzu(7), .souzu(8), .souzu(9))
             ],
-            pair: [.jihai(.ton), .jihai(.ton)],
-            winningTile: .souzu(8)
+            pair: [.pinzu(9), .pinzu(9)],
+            winningTile: .pinzu(7)
+        ),
+
+        "yakuhai": YakuExample(
+            melds: [
+                .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
+                .shuntsu(.pinzu(5), .pinzu(6), .pinzu(7)),
+                .shuntsu(.souzu(3), .souzu(4), .souzu(5)),
+                .koutsu(.jihai(.chun))
+            ],
+            pair: [.souzu(8), .souzu(8)],
+            winningTile: .jihai(.chun)
         ),
 
         // 2翻
-        "chiitoitsu": YakuExample.chiitoitsu(
-            pairs: [
-                [.manzu(2), .manzu(2)],
-                [.manzu(4), .manzu(4)],
-                [.pinzu(3), .pinzu(3)],
-                [.pinzu(6), .pinzu(6)],
-                [.souzu(5), .souzu(5)],
-                [.souzu(7), .souzu(7)],
-                [.jihai(.haku), .jihai(.haku)]
-            ],
-            winningTile: .jihai(.haku)
-        ),
-
-        "toitoi": YakuExample(
-            melds: [
-                .koutsu(.manzu(3)),
-                .koutsu(.pinzu(5)),
-                .koutsu(.souzu(7)),
-                .koutsu(.jihai(.ton))
-            ],
-            pair: [.manzu(9), .manzu(9)],
-            winningTile: .jihai(.ton)
-        ),
-
         "sanshoku_doujun": YakuExample(
             melds: [
                 .shuntsu(.manzu(3), .manzu(4), .manzu(5)),
                 .shuntsu(.pinzu(3), .pinzu(4), .pinzu(5)),
                 .shuntsu(.souzu(3), .souzu(4), .souzu(5)),
-                .koutsu(.jihai(.hatsu))
+                .shuntsu(.manzu(7), .manzu(8), .manzu(9))
             ],
-            pair: [.manzu(1), .manzu(1)],
+            pair: [.pinzu(2), .pinzu(2)],
             winningTile: .souzu(5)
-        ),
-
-        "sanshoku_doukou": YakuExample(
-            melds: [
-                .koutsu(.manzu(6)),
-                .koutsu(.pinzu(6)),
-                .koutsu(.souzu(6)),
-                .shuntsu(.manzu(1), .manzu(2), .manzu(3))
-            ],
-            pair: [.jihai(.nan), .jihai(.nan)],
-            winningTile: .souzu(6)
         ),
 
         "ittsu": YakuExample(
             melds: [
-                .shuntsu(.manzu(1), .manzu(2), .manzu(3)),
-                .shuntsu(.manzu(4), .manzu(5), .manzu(6)),
-                .shuntsu(.manzu(7), .manzu(8), .manzu(9)),
-                .koutsu(.pinzu(5))
+                .shuntsu(.pinzu(1), .pinzu(2), .pinzu(3)),
+                .shuntsu(.pinzu(4), .pinzu(5), .pinzu(6)),
+                .shuntsu(.pinzu(7), .pinzu(8), .pinzu(9)),
+                .shuntsu(.souzu(2), .souzu(3), .souzu(4))
             ],
-            pair: [.souzu(2), .souzu(2)],
-            winningTile: .manzu(9)
+            pair: [.manzu(5), .manzu(5)],
+            winningTile: .pinzu(9)
         ),
 
         "chantai": YakuExample(
             melds: [
                 .shuntsu(.manzu(1), .manzu(2), .manzu(3)),
-                .shuntsu(.manzu(7), .manzu(8), .manzu(9)),
-                .shuntsu(.pinzu(1), .pinzu(2), .pinzu(3)),
-                .koutsu(.jihai(.ton))
+                .shuntsu(.pinzu(7), .pinzu(8), .pinzu(9)),
+                .koutsu(.jihai(.ton)),
+                .shuntsu(.souzu(7), .souzu(8), .souzu(9))
             ],
-            pair: [.jihai(.haku), .jihai(.haku)],
+            pair: [.manzu(9), .manzu(9)],
+            winningTile: .souzu(7)
+        ),
+
+        "toitoi": YakuExample(
+            melds: [
+                .koutsu(.manzu(4)),
+                .koutsu(.pinzu(5)),
+                .koutsu(.souzu(9)),
+                .koutsu(.souzu(2))
+            ],
+            pair: [.pinzu(7), .pinzu(7)],
+            winningTile: .pinzu(7)
+        ),
+
+        "sanankou": YakuExample(
+            melds: [
+                .koutsu(.manzu(2)),
+                .shuntsu(.manzu(3), .manzu(4), .manzu(5)),
+                .koutsu(.pinzu(7)),
+                .koutsu(.souzu(4))
+            ],
+            pair: [.souzu(8), .souzu(8)],
+            winningTile: .manzu(5)
+        ),
+
+        "chiitoitsu": YakuExample.chiitoitsu(
+            pairs: [
+                [.manzu(1), .manzu(1)],
+                [.manzu(5), .manzu(5)],
+                [.pinzu(3), .pinzu(3)],
+                [.pinzu(9), .pinzu(9)],
+                [.souzu(2), .souzu(2)],
+                [.souzu(8), .souzu(8)],
+                [.jihai(.ton), .jihai(.ton)]
+            ],
             winningTile: .jihai(.ton)
+        ),
+
+        "sanshoku_doukou": YakuExample(
+            melds: [
+                .koutsu(.manzu(3)),
+                .shuntsu(.manzu(5), .manzu(6), .manzu(7)),
+                .koutsu(.pinzu(3)),
+                .koutsu(.souzu(3))
+            ],
+            pair: [.pinzu(7), .pinzu(7)],
+            winningTile: .manzu(7)
         ),
 
         "shousangen": YakuExample(
             melds: [
                 .koutsu(.jihai(.haku)),
                 .koutsu(.jihai(.hatsu)),
-                .koutsu(.manzu(3)),
-                .shuntsu(.souzu(4), .souzu(5), .souzu(6))
+                .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
+                .shuntsu(.pinzu(6), .pinzu(7), .pinzu(8))
             ],
             pair: [.jihai(.chun), .jihai(.chun)],
-            winningTile: .souzu(6)
+            winningTile: .jihai(.chun)
         ),
 
         "honroutou": YakuExample(
             melds: [
                 .koutsu(.manzu(1)),
-                .koutsu(.manzu(9)),
-                .koutsu(.pinzu(1)),
+                .koutsu(.pinzu(9)),
+                .koutsu(.souzu(9)),
                 .koutsu(.jihai(.ton))
             ],
-            pair: [.jihai(.haku), .jihai(.haku)],
-            winningTile: .jihai(.ton)
+            pair: [.jihai(.pei), .jihai(.pei)],
+            winningTile: .jihai(.pei)
         ),
 
         // 3翻
+        "honitsu": YakuExample(
+            melds: [
+                .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
+                .shuntsu(.manzu(5), .manzu(6), .manzu(7)),
+                .koutsu(.manzu(9)),
+                .koutsu(.jihai(.ton))
+            ],
+            pair: [.jihai(.haku), .jihai(.haku)],
+            winningTile: .manzu(7)
+        ),
+
+        "junchan": YakuExample(
+            melds: [
+                .shuntsu(.manzu(1), .manzu(2), .manzu(3)),
+                .shuntsu(.manzu(7), .manzu(8), .manzu(9)),
+                .shuntsu(.pinzu(1), .pinzu(2), .pinzu(3)),
+                .koutsu(.souzu(9))
+            ],
+            pair: [.souzu(1), .souzu(1)],
+            winningTile: .pinzu(3)
+        ),
+
         "ryanpeikou": YakuExample(
             melds: [
                 .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
@@ -162,38 +207,16 @@ extension YakuExample {
             winningTile: .pinzu(8)
         ),
 
-        "junchan": YakuExample(
-            melds: [
-                .shuntsu(.manzu(1), .manzu(2), .manzu(3)),
-                .shuntsu(.manzu(7), .manzu(8), .manzu(9)),
-                .shuntsu(.pinzu(1), .pinzu(2), .pinzu(3)),
-                .shuntsu(.souzu(7), .souzu(8), .souzu(9))
-            ],
-            pair: [.pinzu(9), .pinzu(9)],
-            winningTile: .souzu(9)
-        ),
-
-        "honitsu": YakuExample(
-            melds: [
-                .shuntsu(.manzu(2), .manzu(3), .manzu(4)),
-                .shuntsu(.manzu(5), .manzu(6), .manzu(7)),
-                .koutsu(.manzu(8)),
-                .koutsu(.jihai(.hatsu))
-            ],
-            pair: [.jihai(.chun), .jihai(.chun)],
-            winningTile: .manzu(8)
-        ),
-
         // 6翻
         "chinitsu": YakuExample(
             melds: [
-                .shuntsu(.souzu(1), .souzu(2), .souzu(3)),
-                .shuntsu(.souzu(4), .souzu(5), .souzu(6)),
-                .shuntsu(.souzu(6), .souzu(7), .souzu(8)),
-                .koutsu(.souzu(9))
+                .shuntsu(.pinzu(1), .pinzu(2), .pinzu(3)),
+                .shuntsu(.pinzu(3), .pinzu(4), .pinzu(5)),
+                .shuntsu(.pinzu(6), .pinzu(7), .pinzu(8)),
+                .koutsu(.pinzu(9))
             ],
-            pair: [.souzu(2), .souzu(2)],
-            winningTile: .souzu(9)
+            pair: [.pinzu(5), .pinzu(5)],
+            winningTile: .pinzu(5)
         )
     ]
 }

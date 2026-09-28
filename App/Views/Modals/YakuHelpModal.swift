@@ -42,36 +42,48 @@ struct YakuHelpModal: View {
                     VStack(alignment: .leading, spacing: 20) {
                         // 翻数バッジ
                         HStack(spacing: 12) {
-                            Text("門前 \(def.menzenHan)翻")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundStyle(.black)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 6)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .fill(Color.appAccentYellow)
-                                )
+                            HStack(spacing: 6) {
+                                Image(systemName: "star.fill")
+                                    .font(.system(size: 14))
+                                Text("門前 \(def.menzenHan)翻")
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                            }
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(
+                                Capsule()
+                                    .fill(Color.appPrimary)
+                            )
 
                             if let nakiHan = def.nakiHan {
-                                Text("鳴き \(nakiHan)翻")
-                                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 6)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(Color.appTextSecondary)
-                                    )
+                                HStack(spacing: 6) {
+                                    Image(systemName: "person.2.fill")
+                                        .font(.system(size: 14))
+                                    Text("鳴き \(nakiHan)翻")
+                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                }
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.appAccent)
+                                )
                             } else {
-                                Text("鳴き 不可")
-                                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 6)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(Color.appTextSecondary)
-                                    )
+                                HStack(spacing: 6) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .font(.system(size: 14))
+                                    Text("鳴き 不可")
+                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                }
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.appTextSecondary)
+                                )
                             }
                         }
                         .padding(.horizontal)
@@ -94,8 +106,8 @@ struct YakuHelpModal: View {
                                     .padding()
                                     .frame(maxWidth: .infinity)
                                     .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(Color.appPrimary.opacity(0.15))
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .fill(Color.white.opacity(0.5))
                                     )
                             }
                             .padding(.horizontal)
@@ -113,15 +125,16 @@ struct YakuHelpModal: View {
         .frame(maxWidth: 600)
         .background(
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color.appBackground)
+                .fill(Color.white)
         )
+        .glassEffect()
         .padding(20)
     }
 }
 
 #Preview {
     ZStack {
-        Color.gray.opacity(0.3)
+        Color.appBackground
             .ignoresSafeArea()
 
         YakuHelpModal(yakuId: "pinfu") {}
@@ -130,7 +143,7 @@ struct YakuHelpModal: View {
 
 #Preview("清一色") {
     ZStack {
-        Color.gray.opacity(0.3)
+        Color.appBackground
             .ignoresSafeArea()
 
         YakuHelpModal(yakuId: "chinitsu") {}

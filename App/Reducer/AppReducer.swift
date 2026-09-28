@@ -39,14 +39,22 @@ final class AppReducer {
         case .calculateTapped:
             handleCalculate(state: state)
 
-        case .resultDismissed:
+        case .settingsTapped:
+            // 他のモーダルを閉じてから開く
             state.isResultPresented = false
+            state.helpTarget = nil
+            state.isSettingsPresented = true
 
-        case .helpTapped(let yakuId):
-            state.helpYakuId = yakuId
+        case .helpTapped(let target):
+            // 他のモーダルを閉じてから開く
+            state.isResultPresented = false
+            state.isSettingsPresented = false
+            state.helpTarget = target
 
-        case .helpDismissed:
-            state.helpYakuId = nil
+        case .modalDismissed:
+            state.isResultPresented = false
+            state.isSettingsPresented = false
+            state.helpTarget = nil
 
         case .resetTapped:
             state.reset()
@@ -120,6 +128,10 @@ final class AppReducer {
         )
 
         state.calculatedScore = calculator.calculate(hand: hand)
+
+        // 他のモーダルを閉じてから開く
+        state.isSettingsPresented = false
+        state.helpTarget = nil
         state.isResultPresented = true
     }
 }

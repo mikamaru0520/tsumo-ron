@@ -155,13 +155,17 @@ struct ReducerTests {
         #expect(state.calculatedScore?.hand.totalHan == 4)  // 1 + 1 + 2
     }
 
-    @Test("結果モーダルを閉じる")
-    func dismissResult() {
+    @Test("モーダルを閉じる")
+    func dismissModal() {
         let state = AppState()
         state.isResultPresented = true
+        state.isSettingsPresented = true
+        state.helpTarget = .yaku("tanyao")
 
-        reducer.reduce(state: state, intent: .resultDismissed)
+        reducer.reduce(state: state, intent: .modalDismissed)
         #expect(!state.isResultPresented)
+        #expect(!state.isSettingsPresented)
+        #expect(state.helpTarget == nil)
     }
 
     @Test("ヘルプモーダルを開く・閉じる")
@@ -169,12 +173,25 @@ struct ReducerTests {
         let state = AppState()
 
         // ヘルプを開く
-        reducer.reduce(state: state, intent: .helpTapped("tanyao"))
-        #expect(state.helpYakuId == "tanyao")
+        reducer.reduce(state: state, intent: .helpTapped(.yaku("tanyao")))
+        #expect(state.helpTarget == .yaku("tanyao"))
 
         // ヘルプを閉じる
-        reducer.reduce(state: state, intent: .helpDismissed)
-        #expect(state.helpYakuId == nil)
+        reducer.reduce(state: state, intent: .modalDismissed)
+        #expect(state.helpTarget == nil)
+    }
+
+    @Test("設定モーダルを開く・閉じる")
+    func settingsModal() {
+        let state = AppState()
+
+        // 設定モーダルを開く
+        reducer.reduce(state: state, intent: .settingsTapped)
+        #expect(state.isSettingsPresented)
+
+        // 設定モーダルを閉じる
+        reducer.reduce(state: state, intent: .modalDismissed)
+        #expect(!state.isSettingsPresented)
     }
 
     @Test("リセット")
@@ -197,7 +214,8 @@ struct ReducerTests {
         #expect(state.fu == 30)
         #expect(!state.isNaki)
         #expect(!state.isResultPresented)
-        #expect(state.helpYakuId == nil)
+        #expect(!state.isSettingsPresented)
+        #expect(state.helpTarget == nil)
     }
 
     @Test("翻数の合計計算")
@@ -225,5 +243,65 @@ struct ReducerTests {
         // 鳴きあり
         reducer.reduce(state: state, intent: .nakiToggled)
         #expect(state.totalHan == 1)
+    }
+
+    @Test("モーダルの排他制御: 計算モーダルを開くと他のモーダルが閉じる")
+    func modalExclusivityCalculate() {
+        let state = AppState()
+
+        // ヘルプと設定を開く
+        state.isSettingsPresented = true
+        state.helpTarget = .yaku("tanyao")
+
+        // タンヤオを選択して計算
+        reducer.reduce(state: state, intent: .yakuTapped("tanyao"))
+        reducer.reduce(state: state, intent: .calculateTapped)
+
+        // 計算モーダルだけが開いている
+        #expect(state.isResultPresented)
+        #expect(!state.isSettingsPresented)
+        #expect(state.helpTarget == nil)
+    }
+
+    @Test("モーダルの排他制御: 設定モーダルを開くと他のモーダルが閉じる")
+    func modalExclusivitySettings() {
+        let state = AppState()
+
+        // 結果とヘルプを開く
+        state.isResultPresented = true
+        state.helpTarget = .yaku("tanyao")
+
+        // 設定を開く
+        reducer.reduce(state: state, intent: .settingsTapped)
+
+        // 設定モーダルだけが開いている
+        #expect(state.isSettingsPresented)
+        #expect(!state.isResultPresented)
+        #expect(state.helpTarget == nil)
+    }
+
+    @Test("モーダルの排他制御: ヘルプモーダルを開くと他のモーダルが閉じる")
+    func modalExclusivityHelp() {
+        let state = AppState()
+
+        // 結果と設定を開く
+        state.isResultPresented = true
+        state.isSettingsPresented = true
+
+        // ヘルプを開く
+        reducer.reduce(state: state, intent: .helpTapped(.yaku("tanyao")))
+
+        // ヘルプモーダルだけが開いている
+        #expect(state.helpTarget == .yaku("tanyao"))
+        #expect(!state.isResultPresented)
+        #expect(!state.isSettingsPresented)
+    }
+
+    @Test("役牌ヘルプを開く")
+    func yakuhaiHelp() {
+        let state = AppState()
+
+        reducer.reduce(state: state, intent: .helpTapped(.yakuhai))
+        #expect(state.helpTarget == .yakuhai)
     }
 }

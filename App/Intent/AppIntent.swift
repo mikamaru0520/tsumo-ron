@@ -15,9 +15,9 @@ enum AppIntent {
 
     // モーダル
     case calculateTapped
-    case resultDismissed
-    case helpTapped(String)
-    case helpDismissed
+    case settingsTapped
+    case helpTapped(HelpTarget)
+    case modalDismissed
 
     // その他
     case resetTapped

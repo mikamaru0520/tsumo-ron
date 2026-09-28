@@ -13,7 +13,13 @@ final class AppState {
 
     // モーダル表示状態
     var isResultPresented: Bool = false
-    var helpYakuId: String? = nil
+    var isSettingsPresented: Bool = false
+    var helpTarget: HelpTarget? = nil
+
+    // ルール設定
+    var kuiTan: Bool = true     // 喰いタンあり
+    var kiriage: Bool = false   // 切り上げ満貫
+    var kazoe: Bool = true      // 数え役満
 
     // 計算結果
     var calculatedScore: Score? = nil
@@ -99,7 +105,8 @@ final class AppState {
         winType = .ron
         isNaki = false
         isResultPresented = false
-        helpYakuId = nil
+        isSettingsPresented = false
+        helpTarget = nil
         calculatedScore = nil
     }
 }
