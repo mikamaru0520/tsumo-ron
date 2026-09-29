@@ -195,11 +195,21 @@ struct ContentView: View {
                 }
             } label: {
                 HStack {
-                    Text(def.name)
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        .foregroundStyle(
-                            state.selectedYaku.contains(def.id) ? .white : Color.appTextPrimary
+                    if let ruby = def.ruby {
+                        RubyText(
+                            def.name,
+                            ruby: ruby,
+                            fontSize: 16,
+                            fontWeight: .semibold,
+                            color: state.selectedYaku.contains(def.id) ? .white : Color.appTextPrimary
                         )
+                    } else {
+                        Text(def.name)
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundStyle(
+                                state.selectedYaku.contains(def.id) ? .white : Color.appTextPrimary
+                            )
+                    }
 
                     Spacer()
 

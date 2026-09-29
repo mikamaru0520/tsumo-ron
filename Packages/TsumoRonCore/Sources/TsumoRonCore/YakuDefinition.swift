@@ -2,6 +2,7 @@
 public struct YakuDefinition: Sendable {
     public let id: String
     public let name: String
+    public let ruby: String?         // ルビ（ふりがな）
     public let menzenHan: Int        // 門前時の翻数
     public let nakiHan: Int?         // 鳴き時の翻数（門前専用役は nil）
     public let description: String   // 役の説明
@@ -10,6 +11,7 @@ public struct YakuDefinition: Sendable {
     public init(
         id: String,
         name: String,
+        ruby: String? = nil,
         menzenHan: Int,
         nakiHan: Int? = nil,
         description: String,
@@ -17,6 +19,7 @@ public struct YakuDefinition: Sendable {
     ) {
         self.id = id
         self.name = name
+        self.ruby = ruby
         self.menzenHan = menzenHan
         self.nakiHan = nakiHan
         self.description = description
@@ -35,6 +38,7 @@ extension YakuDefinition {
         "riichi": YakuDefinition(
             id: "riichi",
             name: "立直",
+            ruby: "リーチ",
             menzenHan: 1,
             description: "門前でテンパイしたときに、1000点を支払って宣言する役です。リーチ後は手牌を変えられませんが、裏ドラが付くチャンスがあります。"
         ),
@@ -42,6 +46,7 @@ extension YakuDefinition {
         "ippatsu": YakuDefinition(
             id: "ippatsu",
             name: "一発",
+            ruby: "イッパツ",
             menzenHan: 1,
             description: "リーチ宣言後、誰にも鳴かれずに1巡以内に和了すると成立します。リーチとセットで付く役です。"
         ),
@@ -49,6 +54,7 @@ extension YakuDefinition {
         "tsumo": YakuDefinition(
             id: "tsumo",
             name: "門前清自摸和",
+            ruby: "メンゼンツモ",
             menzenHan: 1,
             description: "鳴かずに門前で手牌を揃え、自分でツモして和了したときに付きます。他家からの放銃ではなく、自分で引いてきた牌で上がることが条件です。"
         ),
@@ -92,6 +98,7 @@ extension YakuDefinition {
         "pinfu": YakuDefinition(
             id: "pinfu",
             name: "平和",
+            ruby: "ピンフ",
             menzenHan: 1,
             description: "4面子すべてが順子で、雀頭が役牌でなく、両面待ちで和了する役です。基本的な形で最も符が少なくなります。",
             example: YakuExample.examples["pinfu"]
@@ -100,6 +107,7 @@ extension YakuDefinition {
         "tanyao": YakuDefinition(
             id: "tanyao",
             name: "断么九",
+            ruby: "タンヤオ",
             menzenHan: 1,
             nakiHan: 1,
             description: "1・9牌と字牌を一切使わず、2〜8の数牌だけで手を作ります。中張牌のみの手で、鳴いても成立します。",
@@ -109,6 +117,7 @@ extension YakuDefinition {
         "iipeikou": YakuDefinition(
             id: "iipeikou",
             name: "一盃口",
+            ruby: "イーペーコー",
             menzenHan: 1,
             description: "同じ順子を2組作る役です。門前限定で、例えば234と234の萬子のように、全く同じ順子が2つあることが条件です。",
             example: YakuExample.examples["iipeikou"]
