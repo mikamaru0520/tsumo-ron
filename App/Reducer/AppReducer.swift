@@ -36,6 +36,15 @@ final class AppReducer {
                 }
             }
 
+        case .kuiTanChanged(let value):
+            state.kuiTan = value
+
+        case .kiriageChanged(let value):
+            state.kiriage = value
+
+        case .kazoeChanged(let value):
+            state.kazoe = value
+
         case .calculateTapped:
             handleCalculate(state: state)
 

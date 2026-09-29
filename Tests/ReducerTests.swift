@@ -304,4 +304,24 @@ struct ReducerTests {
         reducer.reduce(state: state, intent: .helpTapped(.yakuhai))
         #expect(state.helpTarget == .yakuhai)
     }
+
+    @Test("設定を変更")
+    func settingsChange() {
+        let state = AppState()
+
+        // 初期値確認
+        #expect(state.kuiTan == true)
+        #expect(state.kiriage == false)
+        #expect(state.kazoe == true)
+
+        // 設定を変更
+        reducer.reduce(state: state, intent: .kuiTanChanged(false))
+        #expect(state.kuiTan == false)
+
+        reducer.reduce(state: state, intent: .kiriageChanged(true))
+        #expect(state.kiriage == true)
+
+        reducer.reduce(state: state, intent: .kazoeChanged(false))
+        #expect(state.kazoe == false)
+    }
 }

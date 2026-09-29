@@ -12,6 +12,9 @@ enum AppIntent {
     case playerTypeChanged(PlayerType)
     case winTypeChanged(WinType)
     case nakiToggled
+    case kuiTanChanged(Bool)
+    case kiriageChanged(Bool)
+    case kazoeChanged(Bool)
 
     // モーダル
     case calculateTapped

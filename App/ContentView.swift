@@ -81,15 +81,15 @@ struct ContentView: View {
                     SettingsModal(
                         kuiTan: Binding(
                             get: { state.kuiTan },
-                            set: { _ in }
+                            set: { send(.kuiTanChanged($0)) }
                         ),
                         kiriage: Binding(
                             get: { state.kiriage },
-                            set: { _ in }
+                            set: { send(.kiriageChanged($0)) }
                         ),
                         kazoe: Binding(
                             get: { state.kazoe },
-                            set: { _ in }
+                            set: { send(.kazoeChanged($0)) }
                         ),
                         onDismiss: { send(.modalDismissed) }
                     )
