@@ -10,7 +10,8 @@ struct ContentView: View {
         (1, YakuDefinition.definitions.values.filter { $0.menzenHan == 1 && $0.id != "riichi" && $0.id != "ippatsu" && $0.id != "double_riichi" && $0.id != "tsumo" && $0.id != "haitei" && $0.id != "houtei" && $0.id != "rinshan" && $0.id != "chankan" && !["ton", "nan", "sha", "pei", "haku", "hatsu", "chun"].contains($0.id) }.sorted(by: { $0.id < $1.id })),
         (2, YakuDefinition.definitions.values.filter { $0.menzenHan == 2 }.sorted(by: { $0.id < $1.id })),
         (3, YakuDefinition.definitions.values.filter { $0.menzenHan == 3 }.sorted(by: { $0.id < $1.id })),
-        (6, YakuDefinition.definitions.values.filter { $0.menzenHan == 6 }.sorted(by: { $0.id < $1.id }))
+        (6, YakuDefinition.definitions.values.filter { $0.menzenHan == 6 }.sorted(by: { $0.id < $1.id })),
+        (13, YakuDefinition.definitions.values.filter { $0.menzenHan == 13 || $0.menzenHan == 26 }.sorted(by: { $0.id < $1.id }))
     ]
 
     var body: some View {
@@ -165,7 +166,7 @@ struct ContentView: View {
     private func yakuSection(han: Int, yaku: [YakuDefinition]) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             // セクションヘッダー
-            Text("\(han)翻")
+            Text(han >= 13 ? "役満" : "\(han)翻")
                 .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.appTextPrimary)
 
