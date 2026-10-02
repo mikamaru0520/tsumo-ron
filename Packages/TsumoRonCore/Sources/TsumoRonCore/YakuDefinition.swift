@@ -62,6 +62,7 @@ extension YakuDefinition {
         "haitei": YakuDefinition(
             id: "haitei",
             name: "海底摸月",
+            ruby: "ハイテイ",
             menzenHan: 1,
             description: "その局の最後の牌をツモって和了すると成立します。山の最後の1枚で上がる偶然役です。"
         ),
@@ -69,6 +70,7 @@ extension YakuDefinition {
         "houtei": YakuDefinition(
             id: "houtei",
             name: "河底撈魚",
+            ruby: "ホーテイ",
             menzenHan: 1,
             description: "その局の最後の捨て牌でロン和了すると成立します。誰かが最後に捨てた牌で上がる偶然役です。"
         ),
@@ -76,6 +78,7 @@ extension YakuDefinition {
         "rinshan": YakuDefinition(
             id: "rinshan",
             name: "嶺上開花",
+            ruby: "リンシャン",
             menzenHan: 1,
             description: "槓をした直後に引く嶺上牌でツモ和了すると成立します。カンの補充牌で上がる偶然役です。"
         ),
@@ -83,6 +86,7 @@ extension YakuDefinition {
         "chankan": YakuDefinition(
             id: "chankan",
             name: "槍槓",
+            ruby: "チャンカン",
             menzenHan: 1,
             description: "他家が加槓した牌でロン和了すると成立します。相手が刻子に1枚追加しようとした瞬間に横取りする形です。"
         ),
@@ -90,6 +94,7 @@ extension YakuDefinition {
         "double_riichi": YakuDefinition(
             id: "double_riichi",
             name: "両立直",
+            ruby: "ダブルリーチ",
             menzenHan: 2,
             description: "配牌時点で既にテンパイしており、第一打でリーチをかけると成立します。2翻役で、親なら配牌直後にリーチできます。"
         ),
@@ -184,6 +189,7 @@ extension YakuDefinition {
         "chiitoitsu": YakuDefinition(
             id: "chiitoitsu",
             name: "七対子",
+            ruby: "チートイツ",
             menzenHan: 2,
             description: "7種類の対子（同じ牌2枚のペア）を集めて和了します。4面子1雀頭ではなく、特殊な形の門前限定役です。",
             example: YakuExample.examples["chiitoitsu"]
@@ -192,6 +198,7 @@ extension YakuDefinition {
         "toitoi": YakuDefinition(
             id: "toitoi",
             name: "対々和",
+            ruby: "トイトイ",
             menzenHan: 2,
             nakiHan: 2,
             description: "4面子すべてを刻子で揃えます。順子を一切使わず、同じ牌3枚の組み合わせだけで手を作ります。",
@@ -201,6 +208,7 @@ extension YakuDefinition {
         "sanshoku_doujun": YakuDefinition(
             id: "sanshoku_doujun",
             name: "三色同順",
+            ruby: "サンシキ",
             menzenHan: 2,
             nakiHan: 1,
             description: "萬子・筒子・索子で同じ数字の順子を作ります。例えば234の萬・筒・索を揃えると成立します。鳴くと1翻に下がります。",
@@ -210,6 +218,7 @@ extension YakuDefinition {
         "sanshoku_doukou": YakuDefinition(
             id: "sanshoku_doukou",
             name: "三色同刻",
+            ruby: "サンショクドーコー",
             menzenHan: 2,
             nakiHan: 2,
             description: "萬子・筒子・索子で同じ数字の刻子を作ります。例えば666の萬・筒・索を揃えると成立します。",
@@ -219,6 +228,7 @@ extension YakuDefinition {
         "ittsu": YakuDefinition(
             id: "ittsu",
             name: "一気通貫",
+            ruby: "イッキツーカン",
             menzenHan: 2,
             nakiHan: 1,
             description: "同じ種類の牌で123・456・789の3つの順子を作ります。1から9まで一直線に繋がった形です。鳴くと1翻に下がります。",
@@ -228,6 +238,7 @@ extension YakuDefinition {
         "chantai": YakuDefinition(
             id: "chantai",
             name: "混全帯么九",
+            ruby: "チャンタ",
             menzenHan: 2,
             nakiHan: 1,
             description: "すべての面子と雀頭に1・9牌または字牌を含み、順子が1つ以上あります。鳴くと1翻に下がります。",
@@ -237,6 +248,7 @@ extension YakuDefinition {
         "sanankou": YakuDefinition(
             id: "sanankou",
             name: "三暗刻",
+            ruby: "サンアンコー",
             menzenHan: 2,
             nakiHan: 2,
             description: "暗刻（鳴かずに作った刻子）を3つ揃えます。ポンせずに自力で同じ牌を3枚集めた組が3つあることが条件です。"
@@ -245,6 +257,7 @@ extension YakuDefinition {
         "sankantsu": YakuDefinition(
             id: "sankantsu",
             name: "三槓子",
+            ruby: "サンカンツ",
             menzenHan: 2,
             nakiHan: 2,
             description: "槓を3回行います。明槓でも暗槓でも、とにかく槓を3つ作れば成立する珍しい役です。"
@@ -253,6 +266,7 @@ extension YakuDefinition {
         "shousangen": YakuDefinition(
             id: "shousangen",
             name: "小三元",
+            ruby: "ショウサンゲン",
             menzenHan: 2,
             nakiHan: 2,
             description: "白・發・中の三元牌のうち、2種類の刻子と1種類の雀頭を作ります。役牌2翻と合わせて最低4翻になります。",
@@ -262,6 +276,7 @@ extension YakuDefinition {
         "honroutou": YakuDefinition(
             id: "honroutou",
             name: "混老頭",
+            ruby: "ホンロートー",
             menzenHan: 2,
             nakiHan: 2,
             description: "1・9牌と字牌だけで手を作ります。刻子のみの形で、すべて端牌で構成されます。",
@@ -272,6 +287,7 @@ extension YakuDefinition {
         "ryanpeikou": YakuDefinition(
             id: "ryanpeikou",
             name: "二盃口",
+            ruby: "リャンペーコー",
             menzenHan: 3,
             description: "一盃口が2組ある形です。同じ順子のペアが2つ、計4面子すべてが2種類の順子で構成されます。門前限定です。",
             example: YakuExample.examples["ryanpeikou"]
@@ -280,6 +296,7 @@ extension YakuDefinition {
         "junchan": YakuDefinition(
             id: "junchan",
             name: "純全帯么九",
+            ruby: "ジュンチャン",
             menzenHan: 3,
             nakiHan: 2,
             description: "すべての面子と雀頭に1・9牌を含み、順子が1つ以上あります。チャンタから字牌を除いた形です。鳴くと2翻に下がります。",
@@ -289,6 +306,7 @@ extension YakuDefinition {
         "honitsu": YakuDefinition(
             id: "honitsu",
             name: "混一色",
+            ruby: "ホンイーソー",
             menzenHan: 3,
             nakiHan: 2,
             description: "1種類の数牌と字牌だけで手を作ります。萬子だけ、筒子だけ、索子だけのいずれか+字牌の組み合わせです。鳴くと2翻に下がります。",
@@ -299,6 +317,7 @@ extension YakuDefinition {
         "chinitsu": YakuDefinition(
             id: "chinitsu",
             name: "清一色",
+            ruby: "チンイーソー",
             menzenHan: 6,
             nakiHan: 5,
             description: "1種類の数牌だけで手を作ります。萬子だけ、筒子だけ、索子だけのいずれかで、字牌を一切使いません。鳴くと5翻に下がります。",
@@ -309,6 +328,7 @@ extension YakuDefinition {
         "kokushi": YakuDefinition(
             id: "kokushi",
             name: "国士無双",
+            ruby: "コクシムソー",
             menzenHan: 13,
             description: "1・9牌と字牌の13種類を1枚ずつ集め、そのうち1種類を雀頭にします。特殊形の門前限定役満です。"
         ),
@@ -316,6 +336,7 @@ extension YakuDefinition {
         "suuankou": YakuDefinition(
             id: "suuankou",
             name: "四暗刻",
+            ruby: "スーアンコー",
             menzenHan: 13,
             description: "暗刻を4つ揃えます。一切鳴かずに、すべての面子を自力で刻子にする門前限定役満です。"
         ),
@@ -323,6 +344,7 @@ extension YakuDefinition {
         "daisangen": YakuDefinition(
             id: "daisangen",
             name: "大三元",
+            ruby: "ダイサンゲン",
             menzenHan: 13,
             nakiHan: 13,
             description: "白・發・中の三元牌すべての刻子を作ります。三元牌3種をすべて揃える役満です。"
@@ -331,6 +353,7 @@ extension YakuDefinition {
         "shousuushii": YakuDefinition(
             id: "shousuushii",
             name: "小四喜",
+            ruby: "ショウスーシー",
             menzenHan: 13,
             nakiHan: 13,
             description: "東・南・西・北のうち3種類の刻子と1種類の雀頭を作ります。風牌4種のうち3つが刻子の役満です。"
@@ -339,6 +362,7 @@ extension YakuDefinition {
         "daisuushii": YakuDefinition(
             id: "daisuushii",
             name: "大四喜",
+            ruby: "ダイスーシー",
             menzenHan: 26,
             nakiHan: 26,
             description: "東・南・西・北すべての刻子を作ります。風牌4種すべてが刻子のダブル役満です。"
@@ -347,6 +371,7 @@ extension YakuDefinition {
         "tsuuiisou": YakuDefinition(
             id: "tsuuiisou",
             name: "字一色",
+            ruby: "ツーイーソー",
             menzenHan: 13,
             nakiHan: 13,
             description: "字牌だけで手を作ります。東南西北白發中の7種類だけで構成される役満です。"
@@ -355,6 +380,7 @@ extension YakuDefinition {
         "chinroutou": YakuDefinition(
             id: "chinroutou",
             name: "清老頭",
+            ruby: "チンロートー",
             menzenHan: 13,
             nakiHan: 13,
             description: "1・9牌だけで手を作ります。混老頭から字牌を除き、端牌のみの刻子で構成される役満です。"
@@ -363,6 +389,7 @@ extension YakuDefinition {
         "ryuuiisou": YakuDefinition(
             id: "ryuuiisou",
             name: "緑一色",
+            ruby: "リューイーソー",
             menzenHan: 13,
             nakiHan: 13,
             description: "緑色の牌だけで手を作ります。索子の23468と發だけで構成される役満です。"
@@ -371,6 +398,7 @@ extension YakuDefinition {
         "chuuren": YakuDefinition(
             id: "chuuren",
             name: "九蓮宝燈",
+            ruby: "チューレンポートー",
             menzenHan: 13,
             description: "1種類の数牌で1112345678999の形を作り、同種の任意の牌で和了します。門前限定の役満です。"
         ),
@@ -378,6 +406,7 @@ extension YakuDefinition {
         "suukantsu": YakuDefinition(
             id: "suukantsu",
             name: "四槓子",
+            ruby: "スーカンツ",
             menzenHan: 13,
             nakiHan: 13,
             description: "槓を4回行います。明槓でも暗槓でも、4つの槓を完成させる非常に珍しい役満です。"
@@ -386,6 +415,7 @@ extension YakuDefinition {
         "tenhou": YakuDefinition(
             id: "tenhou",
             name: "天和",
+            ruby: "テンホー",
             menzenHan: 13,
             description: "親が配牌時点で既に和了している状態です。親の第一ツモ前に成立する門前限定役満です。"
         ),
@@ -393,6 +423,7 @@ extension YakuDefinition {
         "chiihou": YakuDefinition(
             id: "chiihou",
             name: "地和",
+            ruby: "チーホー",
             menzenHan: 13,
             description: "子が第一ツモで和了します。親の第一打後、誰にも鳴かれずに第一ツモで上がる門前限定役満です。"
         )
