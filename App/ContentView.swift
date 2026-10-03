@@ -472,7 +472,7 @@ struct ContentView: View {
                         )
                 }
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(state.hasYaku ? .white : Color.appTextPrimary)
             .padding(.horizontal, 28)
             .padding(.vertical, 18)
             .frame(maxWidth: .infinity)
