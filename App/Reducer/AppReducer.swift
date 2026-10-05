@@ -4,6 +4,7 @@ import TsumoRonCore
 final class AppReducer {
     private let calculator = ScoreCalculator()
 
+    //reduce
     func reduce(state: AppState, intent: AppIntent) {
         switch intent {
         case .yakuTapped(let yakuId):
