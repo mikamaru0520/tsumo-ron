@@ -7,7 +7,7 @@ struct ContentView: View {
 
     // 役を翻数ごとにグループ分け
     private let yakuByHan: [(han: Int, yaku: [YakuDefinition])] = [
-        (1, YakuDefinition.definitions.values.filter { $0.menzenHan == 1 && $0.id != "riichi" && $0.id != "ippatsu" && $0.id != "double_riichi" && $0.id != "tsumo" && $0.id != "haitei" && $0.id != "houtei" && $0.id != "rinshan" && $0.id != "chankan" && !["ton", "nan", "sha", "pei", "haku", "hatsu", "chun"].contains($0.id) }.sorted(by: { $0.id < $1.id })),
+        (1, YakuDefinition.definitions.values.filter { $0.menzenHan == 1 && !["ton", "nan", "sha", "pei", "haku", "hatsu", "chun"].contains($0.id) }.sorted(by: { $0.id < $1.id })),
         (2, YakuDefinition.definitions.values.filter { $0.menzenHan == 2 }.sorted(by: { $0.id < $1.id })),
         (3, YakuDefinition.definitions.values.filter { $0.menzenHan == 3 }.sorted(by: { $0.id < $1.id })),
         (6, YakuDefinition.definitions.values.filter { $0.menzenHan == 6 }.sorted(by: { $0.id < $1.id })),
